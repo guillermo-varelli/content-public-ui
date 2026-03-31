@@ -1,0 +1,200 @@
+import type { Article, ArticlesResponse, GetArticlesParams } from './article.types'
+
+export const MOCK_ARTICLES: Article[] = [
+  {
+    id: '1',
+    slug: 'como-invertir-en-etfs-desde-cero',
+    title: 'Cómo invertir en ETFs desde cero: guía completa para principiantes',
+    excerpt:
+      'Los ETFs son una de las formas más accesibles y diversificadas de invertir tu dinero. Aprende cómo empezar con tan solo $100 y construir un portafolio sólido a largo plazo.',
+    image: 'https://picsum.photos/seed/finance1/800/450',
+    category: 'finanzas',
+    author: { name: 'María González', avatar: 'https://i.pravatar.cc/40?img=1' },
+    publishedAt: '2026-03-28T10:00:00Z',
+    readTime: 8,
+    featured: true,
+  },
+  {
+    id: '2',
+    slug: 'inteligencia-artificial-2026',
+    title: 'El estado de la inteligencia artificial en 2026: lo que debes saber',
+    excerpt:
+      'Desde agentes autónomos hasta modelos multimodales, la IA sigue transformando industrias a una velocidad sin precedentes. Analizamos las tendencias más importantes del año.',
+    image: 'https://picsum.photos/seed/tech1/800/450',
+    category: 'tecnologia',
+    author: { name: 'Carlos Méndez', avatar: 'https://i.pravatar.cc/40?img=2' },
+    publishedAt: '2026-03-27T14:30:00Z',
+    readTime: 10,
+    featured: true,
+  },
+  {
+    id: '3',
+    slug: 'habitos-matutinos-productividad',
+    title: '7 hábitos matutinos que transformarán tu productividad',
+    excerpt:
+      'La mañana marca el tono del día. Incorporar estos hábitos respaldados por la ciencia puede aumentar tu energía, claridad mental y desempeño laboral significativamente.',
+    image: 'https://picsum.photos/seed/wellness1/800/450',
+    category: 'bienestar',
+    author: { name: 'Sofía Ramírez', avatar: 'https://i.pravatar.cc/40?img=3' },
+    publishedAt: '2026-03-26T09:00:00Z',
+    readTime: 6,
+    featured: true,
+  },
+  {
+    id: '4',
+    slug: 'bitcoin-nuevos-maximos-2026',
+    title: 'Bitcoin alcanza nuevos máximos históricos: análisis y perspectivas',
+    excerpt:
+      'La criptomoneda más popular del mundo vuelve a romper récords. Expertos analizan los factores macroeconómicos detrás del rally y qué podría pasar en los próximos meses.',
+    image: 'https://picsum.photos/seed/crypto1/800/450',
+    category: 'trending',
+    author: { name: 'Andrés Torres', avatar: 'https://i.pravatar.cc/40?img=4' },
+    publishedAt: '2026-03-25T18:00:00Z',
+    readTime: 7,
+    featured: false,
+  },
+  {
+    id: '5',
+    slug: 'presupuesto-50-30-20',
+    title: 'La regla 50/30/20: el presupuesto personal que funciona para todos',
+    excerpt:
+      'Destina el 50% a necesidades, el 30% a deseos y el 20% al ahorro. Simple pero poderoso, este método te ayuda a retomar el control de tus finanzas en menos de un mes.',
+    image: 'https://picsum.photos/seed/budget1/800/450',
+    category: 'finanzas',
+    author: { name: 'María González', avatar: 'https://i.pravatar.cc/40?img=1' },
+    publishedAt: '2026-03-24T11:00:00Z',
+    readTime: 5,
+    featured: false,
+  },
+  {
+    id: '6',
+    slug: 'react-19-novedades',
+    title: 'React 19: todas las novedades que cambiarán cómo desarrollas apps',
+    excerpt:
+      'Server Components estables, el nuevo compilador y mejoras en las Acciones del servidor hacen de React 19 un hito en el desarrollo frontend moderno.',
+    image: 'https://picsum.photos/seed/react1/800/450',
+    category: 'tecnologia',
+    author: { name: 'Luis Fernández', avatar: 'https://i.pravatar.cc/40?img=5' },
+    publishedAt: '2026-03-23T16:00:00Z',
+    readTime: 9,
+    featured: false,
+  },
+  {
+    id: '7',
+    slug: 'meditacion-mindfulness-principiantes',
+    title: 'Meditación y mindfulness para principiantes: por dónde empezar',
+    excerpt:
+      'No necesitas horas ni un retiro espiritual para comenzar. Diez minutos diarios de práctica consciente pueden reducir el estrés y mejorar tu bienestar de forma notable.',
+    image: 'https://picsum.photos/seed/meditate1/800/450',
+    category: 'bienestar',
+    author: { name: 'Sofía Ramírez', avatar: 'https://i.pravatar.cc/40?img=3' },
+    publishedAt: '2026-03-22T08:00:00Z',
+    readTime: 6,
+    featured: false,
+  },
+  {
+    id: '8',
+    slug: 'startups-ia-latinoamerica',
+    title: 'Las 10 startups de IA latinoamericanas que están revolucionando la región',
+    excerpt:
+      'Desde Buenos Aires hasta Ciudad de México, un ecosistema vibrante de emprendedores está construyendo soluciones de inteligencia artificial adaptadas a la realidad local.',
+    image: 'https://picsum.photos/seed/startup1/800/450',
+    category: 'trending',
+    author: { name: 'Andrés Torres', avatar: 'https://i.pravatar.cc/40?img=4' },
+    publishedAt: '2026-03-21T13:00:00Z',
+    readTime: 8,
+    featured: false,
+  },
+  {
+    id: '9',
+    slug: 'fondo-emergencia-por-que-importa',
+    title: 'Por qué necesitas un fondo de emergencia y cómo construirlo',
+    excerpt:
+      'La base de cualquier plan financiero sólido es un colchón de 3 a 6 meses de gastos. Te explicamos cómo calcularlo, dónde guardarlo y cómo alcanzarlo paso a paso.',
+    image: 'https://picsum.photos/seed/saving1/800/450',
+    category: 'finanzas',
+    author: { name: 'María González', avatar: 'https://i.pravatar.cc/40?img=1' },
+    publishedAt: '2026-03-20T10:00:00Z',
+    readTime: 5,
+    featured: false,
+  },
+  {
+    id: '10',
+    slug: 'typescript-5-caracteristicas',
+    title: 'TypeScript 5: las características que todo desarrollador debe conocer',
+    excerpt:
+      'Los decoradores estándar, la inferencia mejorada y el modo verbatim de módulos son solo algunas de las funciones que hacen de TypeScript 5 la mejor versión hasta la fecha.',
+    image: 'https://picsum.photos/seed/typescript1/800/450',
+    category: 'tecnologia',
+    author: { name: 'Carlos Méndez', avatar: 'https://i.pravatar.cc/40?img=2' },
+    publishedAt: '2026-03-19T15:00:00Z',
+    readTime: 7,
+    featured: false,
+  },
+  {
+    id: '11',
+    slug: 'nutricion-cerebral-alimentos',
+    title: 'Alimenta tu cerebro: los 8 alimentos que potencian la concentración',
+    excerpt:
+      'La ciencia nutricional confirma que lo que comes impacta directamente tu cognición y estado de ánimo. Descubre qué incluir en tu dieta para rendir mejor cada día.',
+    image: 'https://picsum.photos/seed/food1/800/450',
+    category: 'bienestar',
+    author: { name: 'Sofía Ramírez', avatar: 'https://i.pravatar.cc/40?img=3' },
+    publishedAt: '2026-03-18T09:00:00Z',
+    readTime: 6,
+    featured: false,
+  },
+  {
+    id: '12',
+    slug: 'trabajo-remoto-tendencias-2026',
+    title: 'Trabajo remoto en 2026: las nuevas reglas del juego laboral',
+    excerpt:
+      'El trabajo híbrido se consolida como estándar global. Analizamos cómo están cambiando los contratos, las expectativas salariales y las herramientas de colaboración.',
+    image: 'https://picsum.photos/seed/remote1/800/450',
+    category: 'trending',
+    author: { name: 'Luis Fernández', avatar: 'https://i.pravatar.cc/40?img=5' },
+    publishedAt: '2026-03-17T12:00:00Z',
+    readTime: 7,
+    featured: false,
+  },
+]
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+export async function getMockArticles(params: GetArticlesParams): Promise<ArticlesResponse> {
+  await delay(500)
+
+  let filtered = [...MOCK_ARTICLES]
+
+  if (params.category) {
+    filtered = filtered.filter((a) => a.category === params.category)
+  }
+
+  if (params.featured !== undefined) {
+    filtered = filtered.filter((a) => a.featured === params.featured)
+  }
+
+  const total = filtered.length
+  const start = (params.page - 1) * params.pageSize
+  const end = start + params.pageSize
+  const articles = filtered.slice(start, end)
+
+  return {
+    articles,
+    total,
+    page: params.page,
+    pageSize: params.pageSize,
+    hasMore: end < total,
+  }
+}
+
+export async function getMockArticleBySlug(slug: string): Promise<Article> {
+  await delay(300)
+  const article = MOCK_ARTICLES.find((a) => a.slug === slug)
+  if (!article) {
+    throw new Error(`Article not found: ${slug}`)
+  }
+  return article
+}
