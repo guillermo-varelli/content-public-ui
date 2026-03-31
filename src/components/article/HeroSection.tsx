@@ -26,8 +26,8 @@ function HeroSkeleton() {
 }
 
 export function HeroSection({ articles, isLoading }: HeroSectionProps) {
-  const items = isLoading ? [] : articles.slice(0, 3)
-  const skeletonCount = isLoading ? 3 : 0
+  const items = isLoading ? [] : articles.slice(0, 4)
+  const skeletonCount = isLoading ? 4 : 0
 
   return (
     <section aria-label="Artículos destacados">
@@ -35,7 +35,7 @@ export function HeroSection({ articles, isLoading }: HeroSectionProps) {
         <span className="w-1 h-6 rounded-full bg-primary-500" aria-hidden />
         <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Destacados</h2>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {items.map((article) => (
           <ArticleHeroCard key={article.id} article={article} />
         ))}

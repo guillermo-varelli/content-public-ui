@@ -12,7 +12,7 @@ const NAV_LINKS = [
 
 function Logo() {
   return (
-    <a href="/" className="flex items-center gap-2 flex-shrink-0" aria-label="TuSitio inicio">
+    <a href="/" className="flex items-center gap-2 flex-shrink-0" aria-label="Xana inicio">
       {/* Green diamond SVG */}
       <svg
         width="32"
@@ -43,7 +43,7 @@ function Logo() {
         />
       </svg>
       <span className="text-xl font-extrabold text-gray-900 dark:text-gray-100 tracking-tight">
-        TuSitio
+        Xana
       </span>
     </a>
   )
