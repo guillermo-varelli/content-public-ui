@@ -12,11 +12,16 @@ interface ArticleCardProps {
 export function ArticleCard({ article }: ArticleCardProps) {
   const navigate = useNavigate()
 
-  const formattedDate = format(parseISO(article.publishedAt), "d 'de' MMM, yyyy", { locale: es })
+  let formattedDate = ''
+  try {
+    formattedDate = format(parseISO(article.publishedAt), "d 'de' MMM, yyyy", { locale: es })
+  } catch {
+    formattedDate = ''
+  }
 
   return (
     <article
-      onClick={() => navigate(`/article/${article.id}`)}
+      onClick={() => navigate(`/article/${article.slug}`)}
       className="group flex flex-col bg-white dark:bg-gray-800 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer"
     >
       <div className="relative w-full aspect-video overflow-hidden bg-gray-100 dark:bg-gray-700">

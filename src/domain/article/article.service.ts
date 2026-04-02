@@ -40,15 +40,15 @@ async function fetchPaginatedContent(
   } else if (Array.isArray(raw?.data)) {
     reviews = raw.data as ContentReview[]
     total = raw.total ?? reviews.length
-    hasMore = raw.has_more ?? raw.hasMore ?? page * pageSize < total
+    hasMore = raw.has_next ?? raw.has_more ?? raw.hasMore ?? page * pageSize < total
   } else if (Array.isArray(raw?.content_reviews)) {
     reviews = raw.content_reviews as ContentReview[]
     total = raw.total ?? reviews.length
-    hasMore = raw.has_more ?? raw.hasMore ?? page * pageSize < total
+    hasMore = raw.has_next ?? raw.has_more ?? raw.hasMore ?? page * pageSize < total
   } else if (Array.isArray(raw?.items)) {
     reviews = raw.items as ContentReview[]
     total = raw.total ?? reviews.length
-    hasMore = raw.has_more ?? raw.hasMore ?? page * pageSize < total
+    hasMore = raw.has_next ?? raw.has_more ?? raw.hasMore ?? page * pageSize < total
   } else {
     console.error('Unexpected /content response shape:', raw)
     reviews = []
@@ -132,10 +132,10 @@ function mapReviewToArticle(review: ContentReview, index: number): Article {
     image: getImageUrl(review),
     category: mapCategory(review.category),
     author: PLACEHOLDER_AUTHORS[index % PLACEHOLDER_AUTHORS.length],
-    publishedAt: review.created,
+    publishedAt: review.created ?? new Date(0).toISOString(),
     readTime: estimateReadTime(review.message),
     featured: false,
-    slug: slugify(review.title),
+    slug: review.slug || slugify(review.title),
   }
 }
 
@@ -158,7 +158,7 @@ export async function getArticles(params: GetArticlesParams): Promise<ArticlesRe
 
 export async function getArticleBySlug(slug: string): Promise<Article> {
   const reviews = await fetchAllReviews()
-  const index = reviews.findIndex((r) => slugify(r.title) === slug)
+  const index = reviews.findIndex((r) => (r.slug || slugify(r.title)) === slug)
   if (index === -1) throw new Error(`Article not found: ${slug}`)
   return { ...mapReviewToArticle(reviews[index], index), featured: index < 3 }
 }
