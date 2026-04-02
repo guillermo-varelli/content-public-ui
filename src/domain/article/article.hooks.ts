@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import type { Article, ArticleCategory, ContentReview } from './article.types'
-import { getArticles, getContentReviewById } from './article.service'
+import { getArticles, getArticleBySlug, getContentReviewById } from './article.service'
 
 const PAGE_SIZE = 20
 const HERO_COUNT = 4
@@ -19,7 +19,7 @@ interface UseArticlesReturn {
 export function useArticles(): UseArticlesReturn {
   const [articles, setArticles] = useState<Article[]>([])
   const [featuredArticles, setFeaturedArticles] = useState<Article[]>([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [hasMore, setHasMore] = useState(false)
   const [page, setPage] = useState(1)
@@ -87,6 +87,29 @@ export function useArticles(): UseArticlesReturn {
     setCategory,
     activeCategory,
   }
+}
+
+export function useArticleDetailBySlug(slug: string | null) {
+  const [article, setArticle] = useState<Article | null>(null)
+  const [isLoading, setIsLoading] = useState(slug !== null)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!slug) return
+    let cancelled = false
+    setIsLoading(true)
+    setError(null)
+    setArticle(null)
+
+    getArticleBySlug(slug)
+      .then((a) => { if (!cancelled) setArticle(a) })
+      .catch((err) => { if (!cancelled) setError(err instanceof Error ? err.message : 'Error') })
+      .finally(() => { if (!cancelled) setIsLoading(false) })
+
+    return () => { cancelled = true }
+  }, [slug])
+
+  return { article, isLoading, error }
 }
 
 export function useArticleDetail(id: number | null) {

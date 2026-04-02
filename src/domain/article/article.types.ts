@@ -48,6 +48,7 @@ export interface ContentReview {
   sub_category: string
   image_url: string
   image_prompt: string
+  slug: string | null
   created: string
   last_updated: string
 }
