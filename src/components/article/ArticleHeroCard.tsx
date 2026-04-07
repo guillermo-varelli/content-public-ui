@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { format, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Article } from '../../domain/article/article.types'
-import { Badge } from '../ui/Badge'
 
 interface ArticleHeroCardProps {
   article: Article
@@ -32,9 +31,6 @@ export function ArticleHeroCard({ article }: ArticleHeroCardProps) {
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-        <div className="absolute top-3 left-3">
-          <Badge category={article.category} size="md" />
-        </div>
       </div>
 
       <div className="flex flex-col flex-1 p-5">

@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { format, parseISO } from 'date-fns'
 import { es } from 'date-fns/locale'
 import type { Article } from '../../domain/article/article.types'
-import { Badge } from '../ui/Badge'
 
 interface ArticleCardProps {
   article: Article
@@ -31,9 +30,6 @@ export function ArticleCard({ article }: ArticleCardProps) {
           loading="lazy"
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
-        <div className="absolute top-3 left-3">
-          <Badge category={article.category} />
-        </div>
       </div>
 
       <div className="flex flex-col flex-1 p-5">
