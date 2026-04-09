@@ -156,9 +156,41 @@ export async function getArticles(params: GetArticlesParams): Promise<ArticlesRe
   return { articles, total, page: params.page, pageSize: params.pageSize, hasMore }
 }
 
+export async function searchArticles(params: { q: string; page: number; pageSize: number }): Promise<ArticlesResponse> {
+  const urlParams = new URLSearchParams({
+    q: params.q,
+    page: String(params.page),
+    page_size: String(params.pageSize),
+  })
+
+  const res = await fetch(`${API_BASE}/content/search?${urlParams}`)
+  if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`)
+
+  const raw = await res.json()
+  const reviews: ContentReview[] = Array.isArray(raw?.data) ? raw.data : []
+  const articles = reviews.map((r, i) => mapReviewToArticle(r, i))
+
+  return {
+    articles,
+    total: reviews.length,
+    page: params.page,
+    pageSize: params.pageSize,
+    hasMore: raw.has_next ?? false,
+  }
+}
+
 export async function getArticleBySlug(slug: string): Promise<Article> {
+  const res = await fetch(`${API_BASE}/content/slug/${encodeURIComponent(slug)}`)
+  if (res.ok) {
+    const review: ContentReview = await res.json()
+    const allReviews = await fetchAllReviews()
+    const index = allReviews.findIndex((r) => r.id === review.id)
+    return mapReviewToArticle(review, index >= 0 ? index : 0)
+  }
+
+  // fallback: buscar en caché local
   const reviews = await fetchAllReviews()
-  const index = reviews.findIndex((r) => (r.slug || slugify(r.title)) === slug)
+  const index = reviews.findIndex((r) => (r.slug || slugify(r.title ?? '')) === slug)
   if (index === -1) throw new Error(`Article not found: ${slug}`)
   return { ...mapReviewToArticle(reviews[index], index), featured: index < 3 }
 }

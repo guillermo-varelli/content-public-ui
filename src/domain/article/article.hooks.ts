@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import type { Article, ArticleCategory, ContentReview } from './article.types'
-import { getArticles, getArticleBySlug, getContentReviewById } from './article.service'
+import { getArticles, searchArticles, getArticleBySlug, getContentReviewById } from './article.service'
 
 const PAGE_SIZE = 20
 const HERO_COUNT = 4
@@ -16,7 +16,7 @@ interface UseArticlesReturn {
   activeCategory: ArticleCategory | null
 }
 
-export function useArticles(): UseArticlesReturn {
+export function useArticles(search?: string): UseArticlesReturn {
   const [articles, setArticles] = useState<Article[]>([])
   const [featuredArticles, setFeaturedArticles] = useState<Article[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -25,44 +25,61 @@ export function useArticles(): UseArticlesReturn {
   const [page, setPage] = useState(1)
   const [activeCategory, setActiveCategory] = useState<ArticleCategory | null>(null)
 
+  const q = search?.trim() ?? ''
+
   useEffect(() => {
     let cancelled = false
 
-    async function loadArticles() {
+    async function load() {
       setIsLoading(true)
       setError(null)
 
       try {
-        const res = await getArticles({
-          page,
-          pageSize: PAGE_SIZE,
-          category: activeCategory ?? undefined,
-        })
-
-        if (!cancelled) {
-          if (page === 1) {
-            // First 4 fill the hero, the rest fill the grid
-            setFeaturedArticles(res.articles.slice(0, HERO_COUNT))
-            setArticles(res.articles.slice(HERO_COUNT))
-          } else {
-            setArticles((prev) => [...prev, ...res.articles])
+        if (q) {
+          const res = await searchArticles({ q, page, pageSize: PAGE_SIZE })
+          if (!cancelled) {
+            setFeaturedArticles([])
+            if (page === 1) {
+              setArticles(res.articles)
+            } else {
+              setArticles((prev) => [...prev, ...res.articles])
+            }
+            setHasMore(res.hasMore)
           }
-          setHasMore(res.hasMore)
+        } else {
+          const res = await getArticles({
+            page,
+            pageSize: PAGE_SIZE,
+            category: activeCategory ?? undefined,
+          })
+          if (!cancelled) {
+            if (page === 1) {
+              setFeaturedArticles(res.articles.slice(0, HERO_COUNT))
+              setArticles(res.articles.slice(HERO_COUNT))
+            } else {
+              setArticles((prev) => [...prev, ...res.articles])
+            }
+            setHasMore(res.hasMore)
+          }
         }
       } catch (err) {
         if (!cancelled) {
           setError(err instanceof Error ? err.message : 'Error al cargar artículos')
         }
       } finally {
-        if (!cancelled) {
-          setIsLoading(false)
-        }
+        if (!cancelled) setIsLoading(false)
       }
     }
 
-    void loadArticles()
+    void load()
     return () => { cancelled = true }
-  }, [page, activeCategory])
+  }, [page, activeCategory, q])
+
+  useEffect(() => {
+    setPage(1)
+    setArticles([])
+    setFeaturedArticles([])
+  }, [q])
 
   const loadMore = useCallback(() => {
     if (!isLoading && hasMore) {

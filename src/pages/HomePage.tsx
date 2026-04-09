@@ -1,4 +1,5 @@
 import { Loader2 } from 'lucide-react'
+import { useSearchParams } from 'react-router-dom'
 import { useArticles } from '../domain/article/article.hooks'
 import { HeroSection } from '../components/article/HeroSection'
 import { ArticleGrid } from '../components/article/ArticleGrid'
@@ -6,6 +7,9 @@ import { CategoryFilter } from '../components/ui/CategoryFilter'
 import type { ArticleCategory } from '../domain/article/article.types'
 
 export function HomePage() {
+  const [searchParams] = useSearchParams()
+  const search = searchParams.get('q') ?? ''
+
   const {
     articles,
     featuredArticles,
@@ -15,7 +19,7 @@ export function HomePage() {
     loadMore,
     setCategory,
     activeCategory,
-  } = useArticles()
+  } = useArticles(search)
 
   function handleCategoryChange(cat: ArticleCategory | null) {
     setCategory(cat)
@@ -24,27 +28,33 @@ export function HomePage() {
   return (
     <div className="space-y-10">
       {/* Hero / Featured */}
-      <HeroSection
-        articles={featuredArticles}
-        isLoading={featuredArticles.length === 0 && isLoading}
-      />
+      {!search && (
+        <HeroSection
+          articles={featuredArticles}
+          isLoading={featuredArticles.length === 0 && isLoading}
+        />
+      )}
 
       {/* Filter bar */}
-      <section>
-        <CategoryFilter
-          activeCategory={activeCategory}
-          onCategoryChange={handleCategoryChange}
-        />
-      </section>
+      {!search && (
+        <section>
+          <CategoryFilter
+            activeCategory={activeCategory}
+            onCategoryChange={handleCategoryChange}
+          />
+        </section>
+      )}
 
       {/* Article section header */}
       <section aria-label="Todos los artículos">
         <div className="flex items-center gap-2 mb-6">
           <span className="w-1 h-6 rounded-full bg-primary-500" aria-hidden />
           <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-            {activeCategory
-              ? `Artículos de ${activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)}`
-              : 'Últimos artículos'}
+            {search
+              ? `Resultados para "${search}"`
+              : activeCategory
+                ? `Artículos de ${activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)}`
+                : 'Últimos artículos'}
           </h2>
         </div>
 
@@ -81,7 +91,9 @@ export function HomePage() {
         {!isLoading && articles.length === 0 && !error && (
           <div className="text-center py-16">
             <p className="text-gray-400 dark:text-gray-500 text-lg">
-              No hay artículos en esta categoría aún.
+              {search
+                ? `No se encontraron artículos para "${search}".`
+                : 'No hay artículos en esta categoría aún.'}
             </p>
           </div>
         )}
