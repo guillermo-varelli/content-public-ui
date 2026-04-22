@@ -3,7 +3,6 @@ import { useSearchParams } from 'react-router-dom'
 import { useArticles } from '../domain/article/article.hooks'
 import { HeroSection } from '../components/article/HeroSection'
 import { ArticleGrid } from '../components/article/ArticleGrid'
-import { CategoryFilter } from '../components/ui/CategoryFilter'
 import { BreakingTicker } from '../components/article/BreakingTicker'
 import { TrendingSidebar } from '../components/article/TrendingSidebar'
 import type { ArticleCategory } from '../domain/article/article.types'
@@ -42,16 +41,6 @@ export function HomePage() {
           <HeroSection
             articles={featuredArticles}
             isLoading={featuredArticles.length === 0 && isLoading}
-          />
-        </div>
-      )}
-
-      {/* Category filter */}
-      {!search && (
-        <div className="mb-8">
-          <CategoryFilter
-            activeCategory={activeCategory}
-            onCategoryChange={handleCategoryChange}
           />
         </div>
       )}

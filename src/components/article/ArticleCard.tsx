@@ -25,19 +25,17 @@ export function ArticleCard({ article, variant = 'vertical' }: ArticleCardProps)
     return (
       <article
         onClick={() => navigate(`/article/${article.slug}`)}
-        className="group flex bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 cursor-pointer overflow-hidden"
+        className="group flex aspect-[2/1] bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 cursor-pointer overflow-hidden"
       >
-        {/* Imagen — 50% del card, cuadrada */}
-        <div className="relative w-1/2 flex-shrink-0 overflow-hidden bg-gray-100 dark:bg-gray-700 self-stretch">
+        <div className="w-1/2 flex-shrink-0 h-full overflow-hidden bg-gray-100 dark:bg-gray-700">
           <img
             src={article.image}
             alt={article.title}
             loading="lazy"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         </div>
-        {/* Contenido — 50% restante */}
-        <div className="flex flex-col justify-between w-1/2 p-4">
+        <div className="flex flex-col justify-between flex-1 min-w-0 p-4 overflow-hidden">
           <div>
             <span className={`inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full mb-2 ${meta.badgeBgClass}`}>
               {meta.label}
