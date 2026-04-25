@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import type { Article, ArticleCategory, ContentReview } from './article.types'
 import { getArticles, searchArticles, getArticleBySlug, getContentReviewById } from './article.service'
 
-const PAGE_SIZE = 20
+const PAGE_SIZE = 10
 const HERO_COUNT = 4
 
 interface UseArticlesReturn {

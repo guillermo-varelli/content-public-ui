@@ -47,47 +47,49 @@ export function ArticleGrid({ articles, isLoading }: ArticleGridProps) {
   if (isLoading && articles.length === 0) {
     return (
       <div className="space-y-4">
-        <SkeletonHorizontal />
-        <SkeletonHorizontal />
         <div className="grid grid-cols-2 gap-4">
-          <SkeletonVertical />
-          <SkeletonVertical />
+          <SkeletonVertical /><SkeletonVertical />
+          <SkeletonVertical /><SkeletonVertical />
         </div>
         <SkeletonHorizontal />
+        <div className="grid grid-cols-2 gap-4">
+          <SkeletonVertical /><SkeletonVertical />
+          <SkeletonVertical /><SkeletonVertical />
+        </div>
         <SkeletonHorizontal />
       </div>
     )
   }
 
-  // Pattern per block of 4: 2 horizontal cards, then 2 vertical in a grid
+  // Pattern per block of 5: 4 vertical (2×2 grid) then 1 horizontal
   const elements: ReactNode[] = []
-  const BLOCK_SIZE = 4
+  for (let i = 0; i < articles.length; i += 5) {
+    const vertical = articles.slice(i, i + 4)
+    const horizontal = articles[i + 4]
 
-  for (let blockStart = 0; blockStart < articles.length; blockStart += BLOCK_SIZE) {
-    const block = articles.slice(blockStart, blockStart + BLOCK_SIZE)
-    const horizontal = block.slice(0, 2)
-    const vertical = block.slice(2, 4)
+    elements.push(
+      <div key={`vgrid-${i}`} className="grid grid-cols-2 gap-4">
+        {vertical.map((a) => (
+          <ArticleCard key={a.id} article={a} variant="vertical" />
+        ))}
+      </div>
+    )
 
-    horizontal.forEach((a) => {
+    if (horizontal) {
       elements.push(
-        <ArticleCard key={a.id} article={a} variant="horizontal" />
-      )
-    })
-
-    if (vertical.length > 0) {
-      elements.push(
-        <div key={`vgrid-${blockStart}`} className="grid grid-cols-2 gap-4">
-          {vertical.map((a) => (
-            <ArticleCard key={a.id} article={a} variant="vertical" />
-          ))}
-        </div>
+        <ArticleCard key={horizontal.id} article={horizontal} variant="horizontal" />
       )
     }
   }
 
   if (isLoading && articles.length > 0) {
-    elements.push(<SkeletonHorizontal key="sk-more-1" />)
-    elements.push(<SkeletonHorizontal key="sk-more-2" />)
+    elements.push(
+      <div key="sk-grid" className="grid grid-cols-2 gap-4">
+        <SkeletonVertical /><SkeletonVertical />
+        <SkeletonVertical /><SkeletonVertical />
+      </div>
+    )
+    elements.push(<SkeletonHorizontal key="sk-h" />)
   }
 
   return <div className="space-y-4">{elements}</div>

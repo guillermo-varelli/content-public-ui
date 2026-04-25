@@ -36,9 +36,9 @@ export function HeroSection({ articles, isLoading }: HeroSectionProps) {
         <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Destacados</h2>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Main hero — takes 2/3 on desktop */}
-        <div className="lg:col-span-2 min-h-[320px] sm:min-h-[400px] lg:min-h-[460px]">
+      <div className="flex flex-col lg:flex-row gap-4">
+        {/* Main hero — takes remaining space */}
+        <div className="flex-1 min-h-[320px] sm:min-h-[400px] lg:min-h-[460px]">
           {isLoading
             ? <MainHeroSkeleton />
             : main
@@ -47,8 +47,8 @@ export function HeroSection({ articles, isLoading }: HeroSectionProps) {
           }
         </div>
 
-        {/* Secondary stack — right 1/3 */}
-        <div className="flex flex-col gap-3">
+        {/* Secondary stack — same width as TrendingSidebar */}
+        <div className="flex flex-col gap-3 lg:w-72 xl:w-80 lg:flex-shrink-0">
           {isLoading
             ? Array.from({ length: 3 }).map((_, i) => <SecondaryHeroSkeleton key={i} />)
             : secondary.map((article) => (
