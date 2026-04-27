@@ -7,22 +7,8 @@ interface HeroSectionProps {
  isLoading: boolean
 }
 
-function SecondaryHeroSkeleton() {
- return (
- <div className="flex gap-3 bg-white dark:bg-gray-800 p-3 animate-pulse border border-gray-100 dark:border-gray-700">
- <div className="w-24 h-20 bg-gray-200 dark:bg-gray-700 flex-shrink-0" />
- <div className="flex-1 space-y-2 py-1">
- <div className="h-3 bg-gray-200 dark:bg-gray-700 w-1/3" />
- <div className="h-4 bg-gray-200 dark:bg-gray-700 w-full" />
- <div className="h-4 bg-gray-200 dark:bg-gray-700 w-4/5" />
- <div className="h-3 bg-gray-200 dark:bg-gray-700 w-1/4 mt-2" />
- </div>
- </div>
- )
-}
-
 export function HeroSection({ articles, isLoading }: HeroSectionProps) {
- const secondary = isLoading ? [] : articles.slice(0, 3)
+ const mainArticle = isLoading ? null : articles[0]
 
  return (
  <section aria-label="Artículos destacados">
@@ -31,20 +17,25 @@ export function HeroSection({ articles, isLoading }: HeroSectionProps) {
  <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Destacados</h2>
  </div>
 
- <div className="flex flex-col lg:flex-row lg:items-stretch gap-4 bg-gray-50 dark:bg-gray-800/40 p-4 sm:p-5">
- {/* Live feed — takes remaining space */}
+ {/* Banner noticia principal */}
+ <div className="mb-16 h-[260px] sm:h-[340px]">
+ {isLoading ? (
+ <div className="w-full h-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
+ ) : mainArticle ? (
+ <ArticleHeroCard article={mainArticle} variant="main" />
+ ) : null}
+ </div>
+
+ {/* En vivo + Publicidad (sin margen derecho en En vivo) */}
+ <div className="flex flex-col lg:flex-row lg:items-stretch">
  <div className="flex-1">
  <LiveFeed />
  </div>
 
- {/* Secondary stack — same width as TrendingSidebar */}
- <div className="flex flex-col gap-3 lg:justify-between lg:w-72 xl:w-80 lg:flex-shrink-0">
- {isLoading
- ? Array.from({ length: 3 }).map((_, i) => <SecondaryHeroSkeleton key={i} />)
- : secondary.map((article) => (
- <ArticleHeroCard key={article.id} article={article} variant="secondary" />
- ))
- }
+ {/* Bloque de publicidad */}
+ <div className="lg:w-72 xl:w-80 flex-shrink-0 bg-gray-100 dark:bg-gray-800 border border-dashed border-gray-300 dark:border-gray-600 flex flex-col items-center justify-center min-h-[200px] lg:min-h-0">
+ <span className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">Publicidad</span>
+ <span className="text-[10px] text-gray-300 dark:text-gray-600 mt-1">300 × 250</span>
  </div>
  </div>
  </section>
