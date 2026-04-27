@@ -1,4 +1,4 @@
-import type { Article, ArticlesResponse, GetArticlesParams } from './article.types'
+import type { Article } from './article.types'
 
 export const MOCK_ARTICLES: Article[] = [
   {
@@ -158,43 +158,3 @@ export const MOCK_ARTICLES: Article[] = [
     featured: false,
   },
 ]
-
-function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
-
-export async function getMockArticles(params: GetArticlesParams): Promise<ArticlesResponse> {
-  await delay(500)
-
-  let filtered = [...MOCK_ARTICLES]
-
-  if (params.category) {
-    filtered = filtered.filter((a) => a.category === params.category)
-  }
-
-  if (params.featured !== undefined) {
-    filtered = filtered.filter((a) => a.featured === params.featured)
-  }
-
-  const total = filtered.length
-  const start = (params.page - 1) * params.pageSize
-  const end = start + params.pageSize
-  const articles = filtered.slice(start, end)
-
-  return {
-    articles,
-    total,
-    page: params.page,
-    pageSize: params.pageSize,
-    hasMore: end < total,
-  }
-}
-
-export async function getMockArticleBySlug(slug: string): Promise<Article> {
-  await delay(300)
-  const article = MOCK_ARTICLES.find((a) => a.slug === slug)
-  if (!article) {
-    throw new Error(`Article not found: ${slug}`)
-  }
-  return article
-}

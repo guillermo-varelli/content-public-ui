@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
-import type { Article, ArticleCategory, ContentReview } from './article.types'
-import { getArticles, searchArticles, getArticleBySlug, getContentReviewById } from './article.service'
+import type { Article, ArticleCategory } from './article.types'
+import { getArticles, searchArticles, getArticleBySlug } from './article.service'
 
 const PAGE_SIZE = 10
 const HERO_COUNT = 4
@@ -129,25 +129,3 @@ export function useArticleDetailBySlug(slug: string | null) {
   return { article, isLoading, error }
 }
 
-export function useArticleDetail(id: number | null) {
-  const [review, setReview] = useState<ContentReview | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (id === null) return
-    let cancelled = false
-    setIsLoading(true)
-    setError(null)
-    setReview(null)
-
-    getContentReviewById(id)
-      .then((r) => { if (!cancelled) setReview(r) })
-      .catch((err) => { if (!cancelled) setError(err instanceof Error ? err.message : 'Error') })
-      .finally(() => { if (!cancelled) setIsLoading(false) })
-
-    return () => { cancelled = true }
-  }, [id])
-
-  return { review, isLoading, error }
-}

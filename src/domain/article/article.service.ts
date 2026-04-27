@@ -185,13 +185,3 @@ export async function getArticleBySlug(slug: string): Promise<Article> {
   return { ...mapReviewToArticle(reviews[index], index), featured: index < 3 }
 }
 
-export async function getContentReviewById(id: number): Promise<ContentReview> {
-  const reviews = await fetchAllReviews()
-  const review = reviews.find((r) => r.id === id)
-  if (!review) throw new Error(`Review not found: ${id}`)
-  return review
-}
-
-export function clearArticleCache(): void {
-  cachedAllReviews = null
-}
