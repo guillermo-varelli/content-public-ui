@@ -5,16 +5,16 @@ import { HomePage } from './pages/HomePage'
 import { ArticleDetailPage } from './pages/ArticleDetailPage'
 
 export default function App() {
-  return (
-    <ThemeProvider>
-      <BrowserRouter>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/article/:slug" element={<ArticleDetailPage />} />
-          </Routes>
-        </Layout>
-      </BrowserRouter>
-    </ThemeProvider>
-  )
+ return (
+ <ThemeProvider>
+ <BrowserRouter>
+ <Layout>
+ <Routes>
+ <Route path="/" element={<HomePage />} />
+ <Route path="/article/:slug" element={<ArticleDetailPage />} />
+ </Routes>
+ </Layout>
+ </BrowserRouter>
+ </ThemeProvider>
+ )
 }
