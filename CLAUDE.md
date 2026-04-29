@@ -87,7 +87,6 @@ src/
 
 ### HomePage layout
 ```
-[Breaking ticker — rojo full-width]
 [HeroSection — 1 card grande (2/3) + 3 secundarias (1/3)]
 [CategoryFilter — pills con emojis]
 [Feed (flex-1) | TrendingSidebar (w-72, desktop only)]

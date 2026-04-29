@@ -29,11 +29,6 @@ export function HomePage() {
  return (
  <div>
  {/* Breaking news ticker — full bleed within content area */}
- {!search && articles.length > 0 && (
- <div className="-mx-4 sm:-mx-6 lg:-mx-8 mb-8 overflow-hidden">
- <BreakingTicker articles={articles.slice(0, 8)} />
- </div>
- )}
 
  {/* Hero / Featured */}
  {!search && (
